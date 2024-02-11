@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>猫娘语录管理</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 h-screen">
+  <div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-4">猫娘语录管理</h1>
+    <div class="bg-white rounded-lg shadow p-4 mb-4">
+      <form id="quoteForm">
+        <div class="mb-4">
+          <label for="quote" class="block text-gray-700 font-bold mb-2">语录</label>
+          <textarea id="quote" name="quote" class="w-full border rounded p-2" rows="3"></textarea>
+        </div>
+        <div class="mb-4">
+          <label for="author" class="block text-gray-700 font-bold mb-2">作者</label>
+          <input id="author" name="author" type="text" class="w-full border rounded p-2">
+        </div>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">添加语录</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="successModal" class="fixed inset-0 flex items-center justify-center hidden">
+  
+    <div class="bg-white p-8 rounded-lg shadow-lg">
+      <p class="text-lg font-bold text-green-500">成功添加语录!</p>
+    </div>
+  </div>
+
+  <script>
+    // show success modal
+    function showSuccessModal() {
+      const modal = document.getElementById('successModal');
+      modal.classList.remove('hidden');
+      // Hide modal
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 500);
+    }
+
+    // Submit form function
+    document.getElementById('quoteForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+
+      try {
+        const response = await fetch('/add', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          showSuccessModal(); // Show success modal if request is successful
+          this.reset(); // Reset form fields
+        } else {
+          alert('Failed to request.');
+        }
+      } catch (error) {
+        alert('Error:' + error);
+      }
+    });
+  </script>
+</body>
+</html>
